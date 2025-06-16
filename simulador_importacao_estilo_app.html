@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Simulador de Importação - Tecnomyl</title>
+    <title>TECNOEVOLUI - Simulador de Importação - Tecnomyl</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,36 +16,37 @@
         }
         .container {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 20px;
             justify-content: center;
+            align-items: stretch;
         }
         .card {
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 15px;
-            width: 45%;
-            min-width: 300px;
+            width: 100%;
             box-sizing: border-box;
         }
         table { width: 100%; }
         th, td { padding: 8px; text-align: left; }
         select, input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            font-size: 16px;
         }
         button {
             display: block;
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 18px;
             margin-top: 20px;
         }
         .result {
@@ -56,12 +57,15 @@
         }
         h2, h3 { color: #2c3e50; }
 
-        @media (max-width: 768px) {
-            .card {
-                width: 100%;
+        @media (max-width: 480px) {
+            body {
+                margin: 10px;
             }
-            button {
+            input, select, button {
                 font-size: 18px;
+            }
+            h1 {
+                font-size: 20px;
             }
         }
     </style>
@@ -289,7 +293,8 @@
                 const cofins = prod.COFINS * valor;
                 const icms = (prod.ICMS[estado] || 0) * valor;
 
-                const total = valor + ii + ipi + pis + cofins + icms;
+                const totalImpostos = ii + ipi + pis + cofins + icms;
+                const total = valor + totalImpostos;
 
                 output += `<div class='result'><h4>Cenário ` + id + `</h4>
                 💰 <strong>II:</strong> R$ ` + ii.toFixed(2) + `<br>
@@ -297,7 +302,8 @@
                 💳 <strong>PIS:</strong> R$ ` + pis.toFixed(2) + `<br>
                 🚚 <strong>COFINS:</strong> R$ ` + cofins.toFixed(2) + `<br>
                 🏛️ <strong>ICMS:</strong> R$ ` + icms.toFixed(2) + `<br>
-                <strong>Total com Impostos:</strong> R$ ` + total.toFixed(2) + `<br></div>`;
+                <strong>🔢 Total de Impostos:</strong> R$ ` + totalImpostos.toFixed(2) + `<br>
+                <strong>💵 Custo Total com Impostos:</strong> R$ ` + total.toFixed(2) + `<br></div>`;
             });
 
             document.getElementById('resultados').innerHTML = output;
