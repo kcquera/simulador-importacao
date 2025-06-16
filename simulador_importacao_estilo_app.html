@@ -14,14 +14,20 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
         .card {
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 15px;
             width: 45%;
-            float: left;
-            margin: 10px;
+            min-width: 300px;
+            box-sizing: border-box;
         }
         table { width: 100%; }
         th, td { padding: 8px; text-align: left; }
@@ -32,7 +38,6 @@
             border: 1px solid #ccc;
         }
         button {
-            clear: both;
             display: block;
             width: 100%;
             padding: 12px;
@@ -50,6 +55,15 @@
             margin-top: 15px;
         }
         h2, h3 { color: #2c3e50; }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+            }
+            button {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -57,7 +71,7 @@
         <img src="logo.png" alt="Tecnomyl Logo" width="150">
     </div>
     <h1>Simulador de Importação - Comparativo por Estado</h1>
-    <div id="tables"></div>
+    <div class="container" id="tables"></div>
     <button onclick="calcular()">Calcular Impostos</button>
     <h2>Resultados:</h2>
     <div id="resultados"></div>
