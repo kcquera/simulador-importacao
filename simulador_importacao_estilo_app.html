@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulador de Importação - Tecnomyl</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            width: 45%;
+            float: left;
+            margin: 10px;
+        }
+        table { width: 100%; }
+        th, td { padding: 8px; text-align: left; }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            clear: both;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .result {
+            background-color: #e9f7ef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        h2, h3 { color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="logo.png" alt="Tecnomyl Logo" width="150">
+    </div>
+    <h1>Simulador de Importação - Comparativo por Estado</h1>
+    <div id="tables"></div>
+    <button onclick="calcular()">Calcular Impostos</button>
+    <h2>Resultados:</h2>
+    <div id="resultados"></div>
+
+    <script>
+        const produtos = [
+  {
+    "descricao": "VITTARIUM - 4X5 L",
+    "ncm": "31021090",
+    "II": 0.054,
+    "IPI": 0.0,
+    "PIS": 0.0,
+    "COFINS": 0.0,
+    "ICMS": {
+      "PR": 0.04,
+      "MT": 0.04,
+      "RS": 0.04,
+      "SP": 0.04,
+      "GO": 0.04,
+      "BA": 0.04,
+      "MG": 0.04,
+      "MS": 0.04,
+      "TO": 0.04,
+      "RO": 0.04,
+      "MA": 0.04,
+      "PA": 0.04
+    }
+  },
+  {
+    "descricao": "BORO 10 TM - 4X5 L",
+    "ncm": "38249979",
+    "II": 0.126,
+    "IPI": 0.065,
+    "PIS": 0.021,
+    "COFINS": 0.0965,
+    "ICMS": {
+      "PR": 0.04,
+      "MT": 0.04,
+      "RS": 0.04,
+      "SP": 0.04,
+      "GO": 0.04,
+      "BA": 0.04,
+      "MG": 0.04,
+      "MS": 0.04,
+      "TO": 0.04,
+      "RO": 0.04,
+      "MA": 0.04,
+      "PA": 0.04
+    }
+  },
+  {
+    "descricao": "LEGATUS - 20 L",
+    "ncm": "38249977",
+    "II": 0.0,
+    "IPI": 0.0,
+    "PIS": 0.021,
+    "COFINS": 0.0965,
+    "ICMS": {
+      "PR": 0.04,
+      "MT": 0.04,
+      "RS": 0.04,
+      "SP": 0.04,
+      "GO": 0.04,
+      "BA": 0.04,
+      "MG": 0.04,
+      "MS": 0.04,
+      "TO": 0.04,
+      "RO": 0.04,
+      "MA": 0.04,
+      "PA": 0.04
+    }
+  },
+  {
+    "descricao": "ONE DROP 12X1 L",
+    "ncm": "31051000",
+    "II": 0.054,
+    "IPI": 0.0,
+    "PIS": 0.0,
+    "COFINS": 0.0,
+    "ICMS": {
+      "PR": 0.04,
+      "MT": 0.04,
+      "RS": 0.04,
+      "SP": 0.04,
+      "GO": 0.04,
+      "BA": 0.04,
+      "MG": 0.04,
+      "MS": 0.04,
+      "TO": 0.04,
+      "RO": 0.04,
+      "MA": 0.04,
+      "PA": 0.04
+    }
+  },
+  {
+    "descricao": "ZAPAR - 20 L",
+    "ncm": "38089322",
+    "II": 0.126,
+    "IPI": 0.0,
+    "PIS": 0.0,
+    "COFINS": 0.0,
+    "ICMS": {
+      "PR": 0.0,
+      "MT": 0.0,
+      "RS": 0.0,
+      "SP": 0.0,
+      "GO": 0.0,
+      "BA": 0.205,
+      "MG": 0.18,
+      "MS": 0.17,
+      "TO": 0.2,
+      "RO": 0.2,
+      "MA": 0.23,
+      "PA": 0.19
+    }
+  },
+  {
+    "descricao": "BAIHTA - 20 L",
+    "ncm": "38089329",
+    "II": 0.0,
+    "IPI": 0.0,
+    "PIS": 0.0,
+    "COFINS": 0.0,
+    "ICMS": {
+      "PR": 0.0,
+      "MT": 0.0,
+      "RS": 0.0,
+      "SP": 0.0,
+      "GO": 0.0,
+      "BA": 0.205,
+      "MG": 0.18,
+      "MS": 0.17,
+      "TO": 0.2,
+      "RO": 0.2,
+      "MA": 0.23,
+      "PA": 0.19
+    }
+  },
+  {
+    "descricao": "TECNUP MAX 720 WG - 1X10 KG",
+    "ncm": "38089324",
+    "II": 0.126,
+    "IPI": 0.0,
+    "PIS": 0.0,
+    "COFINS": 0.0,
+    "ICMS": {
+      "PR": 0.0,
+      "MT": 0.0,
+      "RS": 0.0,
+      "SP": 0.0,
+      "GO": 0.0,
+      "BA": 0.205,
+      "MG": 0.18,
+      "MS": 0.17,
+      "TO": 0.2,
+      "RO": 0.2,
+      "MA": 0.23,
+      "PA": 0.19
+    }
+  },
+  {
+    "descricao": "FECYDE - 12X1 L",
+    "ncm": "38089199",
+    "II": 0.0,
+    "IPI": 0.0,
+    "PIS": 0.0,
+    "COFINS": 0.0,
+    "ICMS": {
+      "PR": 0.0,
+      "MT": 0.0,
+      "RS": 0.0,
+      "SP": 0.0,
+      "GO": 0.0,
+      "BA": 0.205,
+      "MG": 0.18,
+      "MS": 0.17,
+      "TO": 0.2,
+      "RO": 0.2,
+      "MA": 0.23,
+      "PA": 0.19
+    }
+  }
+];
+        const estados = ["PR", "MT", "RS", "SP", "GO", "BA", "MG", "MS", "TO", "RO", "MA", "PA"];
+
+        function criarTabela(id) {
+            let html = `<div class='card'><h3>Cenário ` + id + `</h3><table>`;
+            html += `<tr><th>Produto</th><td><select id='produto` + id + `'>`;
+            produtos.forEach(function(p, index) {
+                html += `<option value='` + index + `'>` + p.descricao + ` (NCM: ` + p.ncm + `)</option>`;
+            });
+            html += `</select></td></tr>
+                    <tr><th>Estado</th><td><select id='estado` + id + `'>`;
+            estados.forEach(function(e) { html += `<option value='` + e + `'>` + e + `</option>`; });
+            html += `</select></td></tr>
+                    <tr><th>Valor Mercadoria (R$)</th><td><input id='valor` + id + `' type='number' placeholder='Ex: 10000' /></td></tr>
+                    </table></div>`;
+            return html;
+        }
+
+        document.getElementById('tables').innerHTML = criarTabela('A') + criarTabela('B');
+
+        function calcular() {
+            let output = '';
+            ['A', 'B'].forEach(function(id) {
+                const prodIndex = document.getElementById('produto' + id).value;
+                const estado = document.getElementById('estado' + id).value;
+                const valor = parseFloat(document.getElementById('valor' + id).value) || 0;
+
+                const prod = produtos[prodIndex];
+
+                const ii = prod.II * valor;
+                const ipi = prod.IPI * valor;
+                const pis = prod.PIS * valor;
+                const cofins = prod.COFINS * valor;
+                const icms = (prod.ICMS[estado] || 0) * valor;
+
+                const total = valor + ii + ipi + pis + cofins + icms;
+
+                output += `<div class='result'><h4>Cenário ` + id + `</h4>
+                💰 <strong>II:</strong> R$ ` + ii.toFixed(2) + `<br>
+                🏭 <strong>IPI:</strong> R$ ` + ipi.toFixed(2) + `<br>
+                💳 <strong>PIS:</strong> R$ ` + pis.toFixed(2) + `<br>
+                🚚 <strong>COFINS:</strong> R$ ` + cofins.toFixed(2) + `<br>
+                🏛️ <strong>ICMS:</strong> R$ ` + icms.toFixed(2) + `<br>
+                <strong>Total com Impostos:</strong> R$ ` + total.toFixed(2) + `<br></div>`;
+            });
+
+            document.getElementById('resultados').innerHTML = output;
+        }
+    </script>
+</body>
+</html>
